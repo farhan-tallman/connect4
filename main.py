@@ -30,6 +30,8 @@ depending on what your system supports. Here's a hint: print(u'\u2B24')
 ROWS = 11
 COLUMNS = 13
 
+# this is a test commit
+
 ####################
 # Global Variables
 ####################
