@@ -30,8 +30,6 @@ depending on what your system supports. Here's a hint: print(u'\u2B24')
 ROWS = 11
 COLUMNS = 13
 
-# this is a test commit
-
 ####################
 # Global Variables
 ####################
@@ -43,11 +41,6 @@ GameList = [[" ", " ", " ", " ", " ", " ", " "],  # 7 columns and 6 rows
             [" ", " ", " ", " ", " ", " ", " "],
             [" ", " ", " ", " ", " ", " ", " "],
             [" ", " ", " ", " ", " ", " ", " "]]
-
-# matchPlayer1h = 0  # will hold the number of adjacent 'X' in a row
-matchPlayer2h = 0  # will hold the number of adjacent 'O' in a row
-matchPlayer1v = 0  # will hold the number of adjacent 'X' in a column
-matchPlayer2v = 0  # will hold the number of adjacent 'O' in a column
 
 
 ###########################################
@@ -84,9 +77,6 @@ def draw_board():
 def check_connect():
     global GameEnd
     global GameList
-    global matchPlayer2h
-    global matchPlayer1v
-    global matchPlayer2v
 
     matchPlayer = matchHorizontal("X")
     if matchPlayer == 4:
@@ -155,14 +145,29 @@ def matchVertical(symbol):
 
 
 # Function to check right to left diagonal
+# ------------------------------------------
 def matchDiagonalRL(symbol):
-    row = 0
     column = 3
 
-    for i in range(4):
-        for j in range(3, -1, -1):
-            print(i, j)
-            # match = checkFourRL(row, column, symbol)
+    # the following 3 level nested for loop is for traversing through all
+    # possible diagonals that can be formed from right to left with 4 elements
+    # the columns range from  3 to 6
+    for row in range(3):
+        for i in range(4):
+            r = row
+            c = column
+            for j in range(4):
+                print(r, c)
+                r += 1
+                c -= 1
+            column += 1
+            print("\n")
+        column = 3
+
+    # for i in range(4):
+    #     for j in range(3, -1, -1):
+    #         print(i, j)
+    #         # match = checkFourRL(row, column, symbol)
 
 
 def checkFourRL(row, column, symbol):
@@ -183,6 +188,10 @@ def checkFourRL(row, column, symbol):
 # Main
 ################
 
+matchDiagonalRL("X")
+
+
+"""
 player = 1
 count = 0
 while not GameEnd:  # condition to end game
@@ -211,7 +220,7 @@ while not GameEnd:  # condition to end game
     count += 1
     draw_board()
     check_connect()
-
+"""
 
 # LOOK FOR DIAGONAL MATCH OF ENTERED SYMBOL
 # -----------------------------------------
