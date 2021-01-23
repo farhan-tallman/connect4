@@ -35,12 +35,12 @@ COLUMNS = 13
 ####################
 
 GameEnd = False  # indicates that the game has ended to end the forever loop
-GameList = [["O", " ", " ", " ", "O", " ", " "],  # 7 columns and 6 rows
-            [" ", "O", " ", "O", " ", " ", " "],
-            ["X", " ", "O", " ", "X", " ", "X"],
-            [" ", " ", " ", "O", " ", "X", " "],
-            [" ", " ", " ", " ", "X", " ", " "],
-            [" ", " ", " ", "X", " ", " ", " "]]
+GameList = [[" ", " ", " ", " ", " ", " ", " "],  # 7 columns and 6 rows
+            [" ", " ", " ", " ", " ", " ", " "],
+            [" ", " ", " ", " ", " ", " ", " "],
+            [" ", " ", " ", " ", " ", " ", " "],
+            [" ", " ", " ", " ", " ", " ", " "],
+            [" ", " ", " ", " ", " ", " ", " "]]
 
 
 ###########################################
@@ -105,6 +105,12 @@ def check_connect():
     matchPlayer = matchDiagonal("X")
     if matchPlayer:
         print("\nPlayer 1 Diagonal Win!")
+        GameEnd = True
+        return
+
+    matchPlayer = matchDiagonal("O")
+    if matchPlayer:
+        print("\nPlayer 2 Diagonal Win!")
         GameEnd = True
         return
 
@@ -182,9 +188,9 @@ def matchDiagonal(symbol):
                 matchPlayer = 0  # otherwise reset
                 column += 1  # start from next column in the same row
                 # print("\n")
-            if side == "R2L":   # right to left diagonals
+            if side == "R2L":  # right to left diagonals
                 column = 3  # Reset column to 3 and start from next Row
-            else:               # left to right diagonals
+            else:  # left to right diagonals
                 column = 0  # Reset column to 0 and start from next Row
 
     return False
@@ -194,11 +200,6 @@ def matchDiagonal(symbol):
 # Main
 ################
 
-print(matchDiagonal("O"))
-print(matchDiagonal("X"))
-
-
-"""
 player = 1
 count = 0
 while not GameEnd:  # condition to end game
@@ -227,4 +228,3 @@ while not GameEnd:  # condition to end game
     count += 1
     draw_board()
     check_connect()
-"""
