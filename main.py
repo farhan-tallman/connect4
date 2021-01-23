@@ -35,12 +35,12 @@ COLUMNS = 13
 ####################
 
 GameEnd = False  # indicates that the game has ended to end the forever loop
-GameList = [[" ", " ", " ", " ", " ", " ", " "],  # 7 columns and 6 rows
-            [" ", " ", " ", " ", " ", " ", " "],
-            [" ", " ", " ", " ", " ", " ", " "],
-            [" ", " ", " ", " ", " ", " ", " "],
-            [" ", " ", " ", " ", " ", " ", " "],
-            [" ", " ", " ", " ", " ", " ", " "]]
+GameList = [[" ", " ", " ", " ", " ", " ", "X"],  # 7 columns and 6 rows
+            [" ", " ", " ", " ", " ", "O", " "],
+            [" ", " ", " ", " ", "X", " ", "X"],
+            [" ", " ", " ", "X", " ", "X", " "],
+            [" ", " ", " ", " ", "X", " ", " "],
+            [" ", " ", " ", "X", " ", " ", " "]]
 
 
 ###########################################
@@ -148,7 +148,7 @@ def matchVertical(symbol):
 # ------------------------------------------
 def matchDiagonalRL(symbol):
     column = 3
-
+    matchPlayer = 0
     # the following 3 level nested for loop is for traversing through all
     # possible diagonals that can be formed from right to left with 4 elements
     # the columns range from  3 to 6
@@ -156,39 +156,26 @@ def matchDiagonalRL(symbol):
         for i in range(4):
             r = row
             c = column
-            for j in range(4):
-                print(r, c)
+            for j in range(4):  # this loop checks for adjacent 4 elements
+                if GameList[r][c] == symbol:
+                    matchPlayer += 1
+                # print(r, c)
                 r += 1
                 c -= 1
-            column += 1
+            if matchPlayer == 4:    # 4 adjacent matches have been found
+                return True
+            matchPlayer = 0         # otherwise reset
+            column += 1             # start from next column in the same row
             print("\n")
-        column = 3
-
-    # for i in range(4):
-    #     for j in range(3, -1, -1):
-    #         print(i, j)
-    #         # match = checkFourRL(row, column, symbol)
-
-
-def checkFourRL(row, column, symbol):
-    matchPlayer = 0
-    for item in range(4):
-        if GameList[row][column] == symbol:
-            matchPlayer += 1
-        row += 1
-        column -= 1
-
-    if matchPlayer == 4:
-        return True
-    else:
-        return False
+        column = 3      # Reset column to 3 and start from next Row
+    return False
 
 
 ################
 # Main
 ################
 
-matchDiagonalRL("X")
+print(matchDiagonalRL("X"))
 
 
 """
