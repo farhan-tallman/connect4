@@ -35,11 +35,11 @@ COLUMNS = 13
 ####################
 
 GameEnd = False  # indicates that the game has ended to end the forever loop
-GameList = [["O", " ", " ", " ", " ", " ", " "],  # 7 columns and 6 rows
-            [" ", "O", " ", " ", " ", " ", " "],
+GameList = [["O", " ", " ", " ", "O", " ", " "],  # 7 columns and 6 rows
+            [" ", "O", " ", "O", " ", " ", " "],
             ["X", " ", "O", " ", "X", " ", "X"],
-            [" ", " ", " ", "O", " ", " ", " "],
-            [" ", " ", "X", " ", "X", " ", " "],
+            [" ", " ", " ", "O", " ", "X", " "],
+            [" ", " ", " ", " ", "X", " ", " "],
             [" ", " ", " ", "X", " ", " ", " "]]
 
 
@@ -102,11 +102,11 @@ def check_connect():
         GameEnd = True
         return
 
-    # matchPlayer = matchDiagonal("X")
-    # if matchPlayer == 4:
-    #     print("\nPlayer 1 Diagonal Win!")
-    #     GameEnd = True
-    #     return
+    matchPlayer = matchDiagonal("X")
+    if matchPlayer:
+        print("\nPlayer 1 Diagonal Win!")
+        GameEnd = True
+        return
 
 
 # LOOK FOR HORIZONTAL MATCH OF ENTERED SYMBOL
@@ -146,64 +146,56 @@ def matchVertical(symbol):
 
 # Function to check right to left diagonal
 # ------------------------------------------
-def matchDiagonalRL(symbol):
-    column = 3
+def matchDiagonal(symbol):
     matchPlayer = 0
-    # the following 3 level nested for loop is for traversing through all
-    # possible diagonals that can be formed from right to left with 4 elements
-    # the columns range from  3 to 6
-    for row in range(3):
-        for i in range(4):
-            r = row
-            c = column
-            for j in range(4):  # this loop checks for adjacent 4 elements
-                if GameList[r][c] == symbol:
-                    matchPlayer += 1
-                # print(r, c)
-                r += 1
-                c -= 1
-            if matchPlayer == 4:    # 4 adjacent matches have been found
-                return True
-            matchPlayer = 0         # otherwise reset
-            column += 1             # start from next column in the same row
-            print("\n")
-        column = 3      # Reset column to 3 and start from next Row
+    sides = ["R2L", "L2R"]
+
+    # the following 4 level nested for loop is for traversing through all
+    # possible diagonals that can be formed from right to left and then
+    # from left to right with 4 elements
+    # the columns range from  3 to 6 for right to left comparison
+    # and from 0 to 3 for left to right
+
+    for side in sides:  # this loop will run twice, once for diagonals from right to left and
+        # once for diagonals from left to right
+        if side == "R2L":  # Check diagonals from right to left
+            column = 3
+        else:  # side == "L2R":   check diagonals from left to right
+            column = 0
+
+        for row in range(3):
+            for i in range(4):
+                r = row
+                c = column
+                # print(side)
+                for j in range(4):  # this loop checks for adjacent 4 elements
+                    if GameList[r][c] == symbol:
+                        matchPlayer += 1
+                    # print(r, c)
+                    r += 1
+                    if side == "R2L":
+                        c -= 1
+                    else:
+                        c += 1
+                if matchPlayer == 4:  # 4 adjacent matches have been found
+                    return True
+                matchPlayer = 0  # otherwise reset
+                column += 1  # start from next column in the same row
+                # print("\n")
+            if side == "R2L":   # right to left diagonals
+                column = 3  # Reset column to 3 and start from next Row
+            else:               # left to right diagonals
+                column = 0  # Reset column to 0 and start from next Row
+
     return False
-
-
-# Function to check left to right diagonal
-# ------------------------------------------
-def matchDiagonalLR(symbol):
-    column = 0
-    matchPlayer = 0
-    # the following 3 level nested for loop is for traversing through all
-    # possible diagonals that can be formed from left to right with 4 elements
-    # the columns range from  0 to 3
-    for row in range(3):
-        for i in range(4):
-            r = row
-            c = column
-            for j in range(4):  # this loop checks for adjacent 4 elements
-                if GameList[r][c] == symbol:
-                    matchPlayer += 1
-                # print(r, c)
-                r += 1
-                c += 1
-            if matchPlayer == 4:    # 4 adjacent matches have been found
-                return True
-            matchPlayer = 0         # otherwise reset
-            column += 1             # start from next column in the same row
-            print("\n")
-        column = 0      # Reset column to 0 and start from next Row
-    return False
-
 
 
 ################
 # Main
 ################
 
-print(matchDiagonalLR("O"))
+print(matchDiagonal("O"))
+print(matchDiagonal("X"))
 
 
 """
@@ -236,82 +228,3 @@ while not GameEnd:  # condition to end game
     draw_board()
     check_connect()
 """
-
-# LOOK FOR DIAGONAL MATCH OF ENTERED SYMBOL
-# -----------------------------------------
-def matchDiagonal(symbol):
-    global GameEnd
-    global GameList
-
-    # From left to right there are 12 possible diagonals
-    # check them all, one by one
-    # 1
-    matchPlayer = checkFour(2, 0, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-    # 2
-    matchPlayer = checkFour(1, 0, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-    # 3
-    matchPlayer = checkFour(2, 1, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-    # 4
-    matchPlayer = checkFour(0, 0, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-    # 5
-    matchPlayer = checkFour(1, 1, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-    # 6
-    matchPlayer = checkFour(2, 2, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-    # 7
-    matchPlayer = checkFour(0, 1, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-    # 8
-    matchPlayer = checkFour(1, 2, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-    # 9
-    matchPlayer = checkFour(2, 3, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-    # 10
-    matchPlayer = checkFour(0, 2, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-    # 11
-    matchPlayer = checkFour(1, 3, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-    # 12
-    matchPlayer = checkFour(0, 3, symbol)
-    if matchPlayer == 4:
-        return matchPlayer
-
-
-# This function takes an index and checks if the adjacent 4
-# slots match diagonally from left to right
-def checkFour(rw, cl, symbol):
-    matchPlayer = 0
-    for item in range(4):
-        if GameList[rw][cl] == symbol:
-            matchPlayer += 1
-        rw += 1
-        cl += 1
-    return matchPlayer
